@@ -11,6 +11,11 @@
         <testsuite name="Lunr Testsuite">
         </testsuite>
     </testsuites>
+    <filter>
+        <blacklist>
+            <directory>../tests/</directory>
+        </blacklist>
+    </filter>
     <logging>
         <log    type="coverage-html"
                 target="../build/coverage"
