@@ -19,6 +19,7 @@ $base = dirname(__FILE__) . '/..';
 
 set_include_path(
     $base . '/src:' .
+    $base . '/tests/statics:' .
     get_include_path()
 );
 
