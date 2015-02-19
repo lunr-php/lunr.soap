@@ -12,12 +12,17 @@
         <ini name="zend.enable_gc" value="1" />
     </php>
     <testsuites>
-        <testsuite name="Lunr Testsuite">
+        <testsuite name="Spark">
+            <file>../src/Lunr/Spark/Tests/LunrSoapClientInitTest.php</file>
+            <file>../src/Lunr/Spark/Tests/LunrSoapClientHeaderTest.php</file>
         </testsuite>
     </testsuites>
     <filter>
         <whitelist>
             <directory>../src/Lunr/</directory>
+            <exclude>
+                <directory>../src/Lunr/Spark/Tests/</directory>
+            </exclude>
         </whitelist>
     </filter>
     <logging>
