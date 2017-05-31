@@ -1,0 +1,14 @@
+{
+  "require": {
+    "php": "5.6.*"
+  },
+  "require-dev": {
+    "ext-xdebug": "~2.4"
+  },
+  "config": {
+    "optimize-autoloader": true
+  },
+  "autoload": {
+    "psr-4": {"Lunr\\": "src/Lunr/"}
+  }
+}
