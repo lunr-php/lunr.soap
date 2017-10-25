@@ -23,18 +23,15 @@ set_include_path(
     get_include_path()
 );
 
-if (file_exists(__DIR__ . '/../vendor/autoload.php') == TRUE)
+if (file_exists($base . '/vendor/autoload.php') == TRUE)
 {
     // Load composer autoloader.
-    require_once __DIR__ . '/../vendor/autoload.php';
+    require_once $base . '/vendor/autoload.php';
 }
 else
 {
-    // Load and setup class file autloader
-    require_once 'Lunr/Core/Autoloader.php';
-
-    $autoloader = new Lunr\Core\Autoloader();
-    $autoloader->register();
+    // Load decomposer autoloader.
+    require_once $base . '/decomposer.autoload.inc.php';
 }
 
 define('REFLECTION_BUG_72194', (PHP_MAJOR_VERSION > 5));
