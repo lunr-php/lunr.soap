@@ -1,5 +1,5 @@
 parameters:
     bootstrapFiles:
-        - ../decomposer.autoload.inc.php
-    excludes_analyse:
+        - test.bootstrap.inc.php
+    excludePaths:
         - ../src/*/Tests/*
