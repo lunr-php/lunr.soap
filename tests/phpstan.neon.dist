@@ -1,5 +1,5 @@
 parameters:
     bootstrapFiles:
-        - test.bootstrap.inc.php
+        - phpstan.autoload.inc.php
     excludePaths:
         - ../src/*/Tests/*
