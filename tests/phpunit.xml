@@ -16,8 +16,7 @@
     </php>
     <testsuites>
         <testsuite name="Spark">
-            <file>../src/Lunr/Spark/Tests/LunrSoapClientInitTest.php</file>
-            <file>../src/Lunr/Spark/Tests/LunrSoapClientHeaderTest.php</file>
+            <directory>../src/Lunr/Spark/Tests/</directory>
         </testsuite>
     </testsuites>
     <coverage>
