@@ -15,7 +15,7 @@
         <ini name="zend.enable_gc" value="1"/>
     </php>
     <testsuites>
-        <testsuite name="Spark">
+        <testsuite name="Soap">
             <directory>../src/Lunr/Spark/Tests/</directory>
         </testsuite>
     </testsuites>

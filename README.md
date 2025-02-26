@@ -1,13 +1,12 @@
-# Lunr
+# Lunr.Soap
 
-Lunr is a set of reusable **PHP components**. Lunr is mostly used by [Move][1] applications. Its features
-are slightly geared towards JSON based APIs with push notification support.
+Lunr.Soap is a wrapper around PHP's `SoapClient` class, making it easier to use it in a dependency injection environment (instantiate first, initialize later).
 
 Installation
 ------------
 
-* Install Lunr with Composer or with your own installer.
-* Lunr follows the [semantic versioning][2] standards.
+* Install Lunr.Soap with Composer or with your own installer.
+* Lunr.Soap follows the [semantic versioning][2] standards.
 
 Community
 ---------
@@ -17,16 +16,16 @@ Community
 Contributing
 ------------
 
-Lunr is an Open Source, community-driven project. Join by contributing code or documentation.
+Lunr.Soap is an Open Source, community-driven project. Join by contributing code or documentation.
 
-If you encounter any issues when using Lunr you can report them [on github][4]
+If you encounter any issues when using Lunr.Soap you can report them [on github][4]
 
 About Us
 --------
 
-Lunr development is spearheaded by [Move][1].
+Lunr.Soap development is spearheaded by [Move][1].
 
   [1]: https://moveagency.com
   [2]: https://semver.org
-  [3]: https://github.com/lunr-php/lunr
-  [4]: https://github.com/lunr-php/lunr/issues
+  [3]: https://github.com/lunr-php/lunr.soap
+  [4]: https://github.com/lunr-php/lunr.soap/issues
