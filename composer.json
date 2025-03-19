@@ -9,7 +9,7 @@
     "php": ">=8.1"
   },
   "require-dev": {
-    "lunr/halo": "dev-master",
+    "lunr/halo": "~0.11.0",
     "phpunit/phpunit": ">=10.5 <11.0",
     "ext-xdebug": "~3.1"
   },
