@@ -1,6 +1,6 @@
 {
   "name": "lunr/soap",
-  "description": "Lunr.Gravity is a wrapper for PHP's SoapClient class.",
+  "description": "Lunr.Soap is a wrapper for PHP's SoapClient class.",
   "keywords": [ "SOAP" ],
   "homepage": "https://github.com/lunr-php/lunr.soap",
   "type": "library",
