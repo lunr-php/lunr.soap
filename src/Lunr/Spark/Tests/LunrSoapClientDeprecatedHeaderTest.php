@@ -1,7 +1,7 @@
 <?php
 
 /**
- * This file contains the LunrSoapClientHeaderTest class.
+ * This file contains the LunrSoapClientDeprecatedHeaderTest class.
  *
  * SPDX-FileCopyrightText: Copyright 2013 M2mobi B.V., Amsterdam, The Netherlands
  * SPDX-FileCopyrightText: Copyright 2022 Move Agency Group B.V., Zwolle, The Netherlands
@@ -17,13 +17,13 @@ use SoapHeader;
  *
  * @covers Lunr\Spark\LunrSoapClient
  */
-class LunrSoapClientHeaderTest extends LunrSoapClientTestCase
+class LunrSoapClientDeprecatedHeaderTest extends LunrSoapClientTestCase
 {
 
     /**
-     * Test createHeader() creates a header.
+     * Test create_header() creates a header.
      *
-     * @covers Lunr\Spark\LunrSoapClient::createHeader
+     * @covers Lunr\Spark\LunrSoapClient::create_header
      */
     public function testCreateHeaderCreatesHeader(): void
     {
@@ -31,7 +31,7 @@ class LunrSoapClientHeaderTest extends LunrSoapClientTestCase
         $name      = 'name';
         $data      = [ 'data' ];
 
-        $result = $this->class->createHeader($namespace, $name, $data);
+        $result = $this->class->create_header($namespace, $name, $data);
 
         $expectedHeader = new SoapHeader($namespace, $name, $data);
 
@@ -39,9 +39,9 @@ class LunrSoapClientHeaderTest extends LunrSoapClientTestCase
     }
 
     /**
-     * Test setHeaders() sets client headers.
+     * Test set_headers() sets client headers.
      *
-     * @covers Lunr\Spark\LunrSoapClient::setHeaders
+     * @covers Lunr\Spark\LunrSoapClient::set_headers
      */
     public function testSetHeadersSetsHeaders(): void
     {
@@ -50,7 +50,7 @@ class LunrSoapClientHeaderTest extends LunrSoapClientTestCase
             new SoapHeader('ns2', 'name2', [ 'data2' ]),
         ];
 
-        $this->class->setHeaders($headers);
+        $this->class->set_headers($headers);
 
         if (PHP_MAJOR_VERSION >= 8 && PHP_MINOR_VERSION >= 1)
         {
@@ -70,13 +70,13 @@ class LunrSoapClientHeaderTest extends LunrSoapClientTestCase
     }
 
     /**
-     * Test setHeaders() returns a self reference.
+     * Test set_headers() returns a self reference.
      *
-     * @covers Lunr\Spark\LunrSoapClient::setHeaders
+     * @covers Lunr\Spark\LunrSoapClient::set_headers
      */
     public function testSetHeadersReturnsSelfReference(): void
     {
-        $value = $this->class->setHeaders([]);
+        $value = $this->class->set_headers([]);
 
         $this->assertInstanceOf('Lunr\Spark\LunrSoapClient', $value);
         $this->assertSame($this->class, $value);

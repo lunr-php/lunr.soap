@@ -54,9 +54,25 @@ class LunrSoapClient extends SoapClient
      * @param string $name      Header name
      * @param array  $data      Header data
      *
+     * @deprecated Use createHeader() instead
+     *
      * @return SoapHeader Header created
      */
     public function create_header(string $namespace, string $name, array $data): SoapHeader
+    {
+        return $this->createHeader($namespace, $name, $data);
+    }
+
+    /**
+     * Create a SoapHeader.
+     *
+     * @param string $namespace Header namespace
+     * @param string $name      Header name
+     * @param array  $data      Header data
+     *
+     * @return SoapHeader Header created
+     */
+    public function createHeader(string $namespace, string $name, array $data): SoapHeader
     {
         return new SoapHeader($namespace, $name, $data);
     }
@@ -66,9 +82,23 @@ class LunrSoapClient extends SoapClient
      *
      * @param array|SoapHeader|null $headers Headers to set
      *
+     * @deprecated Use setHeaders() instead
+     *
      * @return static Self reference
      */
-    public function set_headers($headers = NULL)
+    public function set_headers(array|SoapHeader|null $headers = NULL): static
+    {
+        return $this->setHeaders($headers);
+    }
+
+    /**
+     * Set the client headers.
+     *
+     * @param array|SoapHeader|null $headers Headers to set
+     *
+     * @return static Self reference
+     */
+    public function setHeaders(array|SoapHeader|null $headers = NULL): static
     {
         $this->__setSoapHeaders($headers);
 

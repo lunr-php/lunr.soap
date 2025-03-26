@@ -43,6 +43,8 @@ abstract class LunrSoapClientTestCase extends LunrBaseTestCase
      */
     public function tearDown(): void
     {
+        unset($this->class);
+
         parent::tearDown();
     }
 
