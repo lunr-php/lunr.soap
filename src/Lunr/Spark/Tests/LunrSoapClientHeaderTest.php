@@ -33,9 +33,9 @@ class LunrSoapClientHeaderTest extends LunrSoapClientTestCase
 
         $result = $this->class->create_header($namespace, $name, $data);
 
-        $expected_header = new SoapHeader($namespace, $name, $data);
+        $expectedHeader = new SoapHeader($namespace, $name, $data);
 
-        $this->assertEquals($expected_header, $result);
+        $this->assertEquals($expectedHeader, $result);
     }
 
     /**
@@ -56,10 +56,10 @@ class LunrSoapClientHeaderTest extends LunrSoapClientTestCase
         {
             $parent = $this->reflection->getParentClass();
 
-            $default_headers = $parent->getProperty('__default_headers');
-            $default_headers->setAccessible(TRUE);
+            $defaultHeaders = $parent->getProperty('__default_headers');
+            $defaultHeaders->setAccessible(TRUE);
 
-            $value = $default_headers->getValue($this->class);
+            $value = $defaultHeaders->getValue($this->class);
             $this->assertCount(2, $value);
         }
         else
