@@ -10,6 +10,11 @@
 
 namespace Lunr\Spark;
 
+use http\Header;
+use Lunr\Ticks\AnalyticsDetailLevel;
+use Lunr\Ticks\EventLogging\EventLoggerInterface;
+use Lunr\Ticks\TracingControllerInterface;
+use Lunr\Ticks\TracingInfoInterface;
 use SoapClient;
 use SoapHeader;
 
@@ -20,10 +25,35 @@ class LunrSoapClient extends SoapClient
 {
 
     /**
+     * Shared instance of the Header class.
+     * @var Header
+     */
+    protected readonly Header $header;
+
+    /**
+     * Shared instance of an EventLogger class
+     * @var EventLoggerInterface
+     */
+    protected readonly EventLoggerInterface $eventLogger;
+
+    /**
+     * Shared instance of a tracing controller
+     * @var TracingControllerInterface&TracingInfoInterface
+     */
+    protected readonly TracingControllerInterface&TracingInfoInterface $tracingController;
+
+    /**
+     * The detail level for query profiling
+     * @var AnalyticsDetailLevel
+     */
+    protected AnalyticsDetailLevel $analyticsDetailLevel;
+
+    /**
      * Constructor.
      */
     public function __construct()
     {
+        $this->analyticsDetailLevel = AnalyticsDetailLevel::None;
     }
 
     /**
@@ -31,6 +61,7 @@ class LunrSoapClient extends SoapClient
      */
     public function __destruct()
     {
+        unset($this->analyticsDetailLevel);
     }
 
     /**
@@ -45,6 +76,29 @@ class LunrSoapClient extends SoapClient
     {
         parent::__construct($wsdl, $options);
         return $this;
+    }
+
+    /**
+     * Enable SOAP request analytics.
+     *
+     * @param EventLoggerInterface                            $eventLogger Instance of an event logger
+     * @param TracingControllerInterface&TracingInfoInterface $controller  Instance of a tracing controller
+     * @param Header                                          $header      Instance of a header class
+     * @param AnalyticsDetailLevel                            $level       Analytics detail level (defaults to Info)
+     *
+     * @return void
+     */
+    public function enableAnalytics(
+        EventLoggerInterface $eventLogger,
+        TracingControllerInterface&TracingInfoInterface $controller,
+        Header $header,
+        AnalyticsDetailLevel $level = AnalyticsDetailLevel::Info,
+    ): void
+    {
+        $this->eventLogger          = $eventLogger;
+        $this->tracingController    = $controller;
+        $this->header               = $header;
+        $this->analyticsDetailLevel = $level;
     }
 
     /**
