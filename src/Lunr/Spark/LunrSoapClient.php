@@ -17,6 +17,7 @@ use Lunr\Ticks\TracingControllerInterface;
 use Lunr\Ticks\TracingInfoInterface;
 use SoapClient;
 use SoapHeader;
+use Throwable;
 
 /**
  * Wrapper around SoapClient class.
@@ -167,6 +168,133 @@ class LunrSoapClient extends SoapClient
         $this->__setSoapHeaders($headers);
 
         return $this;
+    }
+
+    /**
+     * Performs a SOAP request
+     *
+     * @param string $request  The XML SOAP request.
+     * @param string $location The URL to request.
+     * @param string $action   The SOAP action.
+     * @param int    $version  The SOAP version.
+     * @param bool   $oneWay   If oneWay is set to true, this method returns nothing. Use this where a response is not expected.
+     *
+     * @return string|null The XML SOAP response.
+     */
+    public function __doRequest(string $request, string $location, string $action, int $version, bool $oneWay = FALSE): ?string
+    {
+        if ($this->analyticsDetailLevel === AnalyticsDetailLevel::None)
+        {
+            return parent::__doRequest($request, $location, $action, $version, $oneWay);
+        }
+
+        $this->tracingController->startChildSpan();
+        $startTimestamp = microtime(TRUE);
+
+        $response = parent::__doRequest($request, $location, $action, $version, $oneWay);
+
+        $endTimestamp = microtime(TRUE);
+
+        $fields = [
+            'startTimestamp' => $startTimestamp,
+            'endTimestamp'   => $endTimestamp,
+            'executionTime'  => (float) bcsub((string) $endTimestamp, (string) $startTimestamp, 4),
+            'url'            => $location,
+            'traceID'        => $this->tracingController->getTraceId(),
+            'spanID'         => $this->tracingController->getSpanId(),
+            'parentSpanID'   => $this->tracingController->getParentSpanId(),
+        ];
+
+        $responseHeaders = $this->__getLastResponseHeaders();
+
+        if ($this->analyticsDetailLevel->atLeast(AnalyticsDetailLevel::Detailed))
+        {
+            $fields['requestHeaders']  = $this->prepareLogHeader($this->__getLastRequestHeaders());
+            $fields['responseHeaders'] = $this->prepareLogHeader($responseHeaders);
+            $fields['options']         = json_encode(array_merge($this->options, [ 'oneWay' => $oneWay, 'soapVersion' => $version ]));
+            $fields['requestBody']     = $this->prepareLogData($request);
+            $fields['responseBody']    = $this->prepareLogData($response);
+        }
+
+        preg_match('/HTTP\/\d\.\d\s*\K[\d]+/', $responseHeaders ?? '', $status);
+
+        $tags = [
+            'type'   => 'SOAP',
+            'status' => (isset($status[0]) && is_numeric($status[0])) ? intval($status[0]) : NULL,
+            'domain' => parse_url($location, PHP_URL_HOST),
+        ];
+
+        $this->tracingController->stopChildSpan();
+
+        $this->recordEvent($fields, $tags);
+
+        return $response;
+    }
+
+    /**
+     * Prepare data according to loglevel.
+     *
+     * @param string|null $data Data to prepare for logging.
+     *
+     * @return string|null $data
+     */
+    protected function prepareLogData(?string $data): ?string
+    {
+        if (is_null($data))
+        {
+            return NULL;
+        }
+
+        if ($this->analyticsDetailLevel === AnalyticsDetailLevel::Detailed && strlen($data) > 512)
+        {
+            return substr($data, 0, 512) . '...';
+        }
+
+        return $data;
+    }
+
+    /**
+     * Prepare header data.
+     *
+     * @param string|null $header Headers to prepare for logging.
+     *
+     * @return string|null JSON encoded headers or NULL when headers empty or invalid
+     */
+    protected function prepareLogHeader(?string $header): ?string
+    {
+        try
+        {
+            $headers = $this->header->parse($header);
+        }
+        catch (Throwable $e)
+        {
+            $headers = FALSE;
+        }
+
+        if ($headers === FALSE || $headers === [])
+        {
+            return NULL;
+        }
+
+        return json_encode($headers);
+    }
+
+    /**
+     * Finalize analytics.
+     *
+     * @param array $fields Field data
+     * @param array $tags   Tag data
+     *
+     * @return void
+     */
+    protected function recordEvent(array $fields, array $tags): void
+    {
+        $event = $this->eventLogger->newEvent('outbound_requests_log');
+
+        $event->recordTimestamp();
+        $event->addTags(array_merge($this->tracingController->getSpanSpecificTags(), $tags));
+        $event->addFields($fields);
+        $event->record();
     }
 
 }

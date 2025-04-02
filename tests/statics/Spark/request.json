@@ -1,0 +1,8 @@
+[
+    {
+      "requestHeaders":"POST /Quotation HTTP/1.0\r\nHost: www.xyz.org\r\nContent-Type: text/xml; charset=utf-8\r\nContent-Length: nnn\r\n\r\n",
+      "requestBody":"\u003c?xml version=\"1.0\"?\u003e\n\u003cSOAP-ENV:Envelope xmlns:SOAP-ENV=\"http://www.w3.org/2001/12/soap-envelope\"\u003e\u003cSOAP-ENV:Body\u003e\u003cm:GetQuotation\u003e\u003cm:QuotationsName\u003eMiscroSoft\u003c/m:QuotationsName\u003e\u003c/m:GetQuotation\u003e\u003c/SOAP-ENV:Body\u003e\u003c/SOAP-ENV:Envelope\u003e\n",
+      "responseHeaders":"HTTP/1.1 200 OK\r\nContent-Type: text/xml; charset=utf-8\r\nContent-Length: 402\r\n\r\n",
+      "responseBody":"\u003cs:Envelope xmlns:SOAP-ENV = \"http://www.w3.org/2001/12/soap-envelope\"\u003e\u003cSOAP-ENV:Body xmlns:m = \"http://www.xyz.org/quotation\"\u003e\u003cm:GetQuotationResponse\u003e\u003cActieBerichten xmlns:i=\"http://www.w3.org/2001/XMLSchema-instance\"/\u003e\u003cm:GetQuotationResponse\u003e\u003cm:Quotation\u003eHere is the quotation\u003c/m:Quotation\u003e\u003c/m:GetQuotationResponse\u003e\u003c/SOAP-ENV:Body\u003e\u003c/SOAP-ENV:Envelope\u003e"
+    }
+]
