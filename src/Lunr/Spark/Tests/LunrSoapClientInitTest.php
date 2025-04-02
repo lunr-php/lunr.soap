@@ -45,6 +45,20 @@ class LunrSoapClientInitTest extends LunrSoapClientTestCase
     }
 
     /**
+     * Test init sets options correctly.
+     *
+     * @covers Lunr\Spark\LunrSoapClient::init
+     */
+    public function testInitSetOptionsCorrectly(): void
+    {
+        $wsdl = TEST_STATICS . '/Spark/hello.wsdl';
+
+        $this->class->init($wsdl, [ 'trace' => TRUE ]);
+
+        $this->assertSame([ 'trace' => TRUE ], $this->getReflectionPropertyValue('options'));
+    }
+
+    /**
      * Test init returns a self reference.
      *
      * @covers Lunr\Spark\LunrSoapClient::init

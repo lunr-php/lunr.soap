@@ -27,6 +27,14 @@ class LunrSoapClientBaseTest extends LunrSoapClientTestCase
         $this->assertPropertyEquals('analyticsDetailLevel', AnalyticsDetailLevel::None);
     }
 
+    /**
+     * Test that options are initialized as an empty array.
+     */
+    public function testOptionsIsSetCorrectly(): void
+    {
+        $this->assertArrayEmpty($this->getReflectionPropertyValue('options'));
+    }
+
 }
 
 ?>

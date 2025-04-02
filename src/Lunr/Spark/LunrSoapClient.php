@@ -49,11 +49,18 @@ class LunrSoapClient extends SoapClient
     protected AnalyticsDetailLevel $analyticsDetailLevel;
 
     /**
+     * Soap request options
+     * @var array
+     */
+    protected array $options;
+
+    /**
      * Constructor.
      */
     public function __construct()
     {
         $this->analyticsDetailLevel = AnalyticsDetailLevel::None;
+        $this->options              = [];
     }
 
     /**
@@ -62,6 +69,7 @@ class LunrSoapClient extends SoapClient
     public function __destruct()
     {
         unset($this->analyticsDetailLevel);
+        unset($this->options);
     }
 
     /**
@@ -74,6 +82,8 @@ class LunrSoapClient extends SoapClient
      */
     public function init(string $wsdl, array $options): self
     {
+        $this->options = $options;
+
         parent::__construct($wsdl, $options);
         return $this;
     }
