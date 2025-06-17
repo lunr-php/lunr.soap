@@ -12,6 +12,7 @@ namespace Lunr\Spark;
 
 use http\Header;
 use Lunr\Ticks\AnalyticsDetailLevel;
+use Lunr\Ticks\EventLogging\EventInterface;
 use Lunr\Ticks\EventLogging\EventLoggerInterface;
 use Lunr\Ticks\TracingControllerInterface;
 use Lunr\Ticks\TracingInfoInterface;
@@ -21,6 +22,44 @@ use Throwable;
 
 /**
  * Wrapper around SoapClient class.
+ *
+ * @phpstan-type SoapClientOptions array{
+ *   authentication?: int,
+ *   cache_wsdl?: int,
+ *   classmap?: array<string, class-string>,
+ *   compression?: int,
+ *   connection_timeout?: int,
+ *   encoding?: string,
+ *   exceptions?: bool,
+ *   features?: int,
+ *   keep_alive?: bool,
+ *   local_cert?: string,
+ *   location?: string,
+ *   login?: string,
+ *   passphrase?: string,
+ *   password?: string,
+ *   proxy_host?: string,
+ *   proxy_login?: string,
+ *   proxy_password?: string,
+ *   proxy_port?: string,
+ *   soap_version?: int,
+ *   ssl_method?: string,
+ *   stream_context?: resource,
+ *   style?: int,
+ *   trace?: bool,
+ *   typemap?: TypeMap[],
+ *   uri?: string,
+ *   use?: int,
+ *   user_agent?: string,
+ * }
+ * @phpstan-type TypeMap array{
+ *   from_xml: callable(string): object,
+ *   to_xml: callable(object): string,
+ *   type_name: string,
+ *   type_ns: string,
+ * }
+ * @phpstan-import-type Tags from EventInterface
+ * @phpstan-import-type Fields from EventInterface
  */
 class LunrSoapClient extends SoapClient
 {
@@ -51,7 +90,7 @@ class LunrSoapClient extends SoapClient
 
     /**
      * Soap request options
-     * @var array
+     * @var SoapClientOptions
      */
     protected array $options;
 
@@ -76,8 +115,8 @@ class LunrSoapClient extends SoapClient
     /**
      * Inits the client.
      *
-     * @param string $wsdl    WSDL url
-     * @param array  $options SOAP client options
+     * @param string            $wsdl    WSDL url
+     * @param SoapClientOptions $options SOAP client options
      *
      * @return LunrSoapClient Self reference
      */
@@ -117,13 +156,13 @@ class LunrSoapClient extends SoapClient
      *
      * @param string $namespace Header namespace
      * @param string $name      Header name
-     * @param array  $data      Header data
+     * @param mixed  $data      Header data
      *
      * @deprecated Use createHeader() instead
      *
      * @return SoapHeader Header created
      */
-    public function create_header(string $namespace, string $name, array $data): SoapHeader
+    public function create_header(string $namespace, string $name, mixed $data): SoapHeader
     {
         return $this->createHeader($namespace, $name, $data);
     }
@@ -133,11 +172,11 @@ class LunrSoapClient extends SoapClient
      *
      * @param string $namespace Header namespace
      * @param string $name      Header name
-     * @param array  $data      Header data
+     * @param mixed  $data      Header data
      *
      * @return SoapHeader Header created
      */
-    public function createHeader(string $namespace, string $name, array $data): SoapHeader
+    public function createHeader(string $namespace, string $name, mixed $data): SoapHeader
     {
         return new SoapHeader($namespace, $name, $data);
     }
@@ -145,7 +184,7 @@ class LunrSoapClient extends SoapClient
     /**
      * Set the client headers.
      *
-     * @param array|SoapHeader|null $headers Headers to set
+     * @param SoapHeader[]|SoapHeader|null $headers Headers to set
      *
      * @deprecated Use setHeaders() instead
      *
@@ -159,7 +198,7 @@ class LunrSoapClient extends SoapClient
     /**
      * Set the client headers.
      *
-     * @param array|SoapHeader|null $headers Headers to set
+     * @param SoapHeader[]|SoapHeader|null $headers Headers to set
      *
      * @return static Self reference
      */
@@ -220,7 +259,7 @@ class LunrSoapClient extends SoapClient
 
         $tags = [
             'type'   => 'SOAP',
-            'status' => (isset($status[0]) && is_numeric($status[0])) ? intval($status[0]) : NULL,
+            'status' => (isset($status[0]) && is_numeric($status[0])) ? strval(intval($status[0])) : NULL,
             'domain' => parse_url($location, PHP_URL_HOST),
         ];
 
@@ -282,8 +321,8 @@ class LunrSoapClient extends SoapClient
     /**
      * Finalize analytics.
      *
-     * @param array $fields Field data
-     * @param array $tags   Tag data
+     * @param Fields $fields Field data
+     * @param Tags   $tags   Tag data
      *
      * @return void
      */
