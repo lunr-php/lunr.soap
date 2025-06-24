@@ -16,6 +16,7 @@ use Lunr\Ticks\EventLogging\EventInterface;
 use Lunr\Ticks\EventLogging\EventLoggerInterface;
 use Lunr\Ticks\TracingControllerInterface;
 use Lunr\Ticks\TracingInfoInterface;
+use RuntimeException;
 use SoapClient;
 use SoapHeader;
 use Throwable;
@@ -239,9 +240,6 @@ class LunrSoapClient extends SoapClient
             'endTimestamp'   => $endTimestamp,
             'executionTime'  => (float) bcsub((string) $endTimestamp, (string) $startTimestamp, 4),
             'url'            => $location,
-            'traceID'        => $this->tracingController->getTraceId(),
-            'spanID'         => $this->tracingController->getSpanId(),
-            'parentSpanID'   => $this->tracingController->getParentSpanId(),
         ];
 
         $responseHeaders = $this->__getLastResponseHeaders();
@@ -331,6 +329,9 @@ class LunrSoapClient extends SoapClient
         $event = $this->eventLogger->newEvent('outbound_requests_log');
 
         $event->recordTimestamp();
+        $event->setTraceId($this->tracingController->getTraceId() ?? throw new RuntimeException('Trace ID not available!'));
+        $event->setSpanId($this->tracingController->getSpanId() ?? throw new RuntimeException('Span ID not available!'));
+        $event->setParentSpanId($this->tracingController->getParentSpanId() ?? throw new RuntimeException('Parent Span ID not available!'));
         $event->addTags(array_merge($this->tracingController->getSpanSpecificTags(), $tags));
         $event->addFields($fields);
         $event->record();
