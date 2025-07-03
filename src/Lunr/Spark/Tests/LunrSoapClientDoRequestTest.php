@@ -331,7 +331,9 @@ class LunrSoapClientDoRequestTest extends LunrSoapClientTestCase
                          ->once()
                          ->andReturn(NULL);
 
-        $this->controller->shouldNotReceive('getSpanSpecifictags');
+        $this->controller->shouldReceive('getSpanSpecifictags')
+                         ->once()
+                         ->andReturn([ 'call' => 'controller/method' ]);
 
         $this->controller->shouldReceive('stopChildSpan')
                          ->once();
@@ -355,17 +357,26 @@ class LunrSoapClientDoRequestTest extends LunrSoapClientTestCase
         $this->event->expects($this->never())
                     ->method('setParentSpanId');
 
-        $this->event->expects($this->never())
-                    ->method('addTags');
+        $this->event->expects($this->once())
+                    ->method('addTags')
+                    ->with([
+                        'type'   => 'SOAP',
+                        'status' => 200,
+                        'domain' => 'www.example.com',
+                        'call'   => 'controller/method',
+                    ]);
 
-        $this->event->expects($this->never())
-                    ->method('addFields');
+        $this->event->expects($this->once())
+                    ->method('addFields')
+                    ->with([
+                        'url'            => 'https://www.example.com',
+                        'startTimestamp' => 1734352683.3516,
+                        'endTimestamp'   => 1734352683.3516,
+                        'executionTime'  => 0.0,
+                    ]);
 
-        $this->event->expects($this->never())
+        $this->event->expects($this->once())
                     ->method('record');
-
-        $this->expectException(RuntimeException::class);
-        $this->expectExceptionMessage('Parent Span ID not available!');
 
         $this->class->__doRequest($request['requestBody'], 'https://www.example.com', 'action', 1);
 
