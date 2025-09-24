@@ -301,7 +301,7 @@ class LunrSoapClient extends SoapClient
     {
         try
         {
-            $headers = $this->header->parse($header);
+            $headers = $this->header->parse($header ?? '');
         }
         catch (Throwable $e)
         {
@@ -313,7 +313,7 @@ class LunrSoapClient extends SoapClient
             return NULL;
         }
 
-        return json_encode($headers);
+        return json_encode($headers) ?: NULL;
     }
 
     /**

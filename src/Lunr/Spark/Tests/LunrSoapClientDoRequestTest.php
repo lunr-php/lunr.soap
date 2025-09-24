@@ -91,6 +91,11 @@ class LunrSoapClientDoRequestTest extends LunrSoapClientTestCase
                 return $expectedRequestHeaders;
             }
 
+            if ($headers === '')
+            {
+                return [];
+            }
+
             return $expectedResponseHeaders;
         };
 
@@ -197,6 +202,11 @@ class LunrSoapClientDoRequestTest extends LunrSoapClientTestCase
             if (strpos($headers, 'xyz') !== FALSE)
             {
                 return $expectedRequestHeaders;
+            }
+
+            if ($headers === '')
+            {
+                return [];
             }
 
             return $expectedResponseHeaders;
@@ -309,6 +319,11 @@ class LunrSoapClientDoRequestTest extends LunrSoapClientTestCase
             if (strpos($headers, 'xyz') !== FALSE)
             {
                 return $expectedRequestHeaders;
+            }
+
+            if ($headers === '')
+            {
+                return [];
             }
 
             return $expectedResponseHeaders;
@@ -436,6 +451,11 @@ class LunrSoapClientDoRequestTest extends LunrSoapClientTestCase
             if (strpos($headers, 'xyz') !== FALSE)
             {
                 return $expectedRequestHeaders;
+            }
+
+            if ($headers === '')
+            {
+                return [];
             }
 
             return $expectedResponseHeaders;
@@ -573,6 +593,11 @@ class LunrSoapClientDoRequestTest extends LunrSoapClientTestCase
                 return $expectedRequestHeaders;
             }
 
+            if ($headers === '')
+            {
+                return [];
+            }
+
             return $expectedResponseHeaders;
         };
 
@@ -706,6 +731,11 @@ class LunrSoapClientDoRequestTest extends LunrSoapClientTestCase
             if (strpos($headers, 'xyz') !== FALSE)
             {
                 return $expectedRequestHeaders;
+            }
+
+            if ($headers === '')
+            {
+                return [];
             }
 
             return $expectedResponseHeaders;
